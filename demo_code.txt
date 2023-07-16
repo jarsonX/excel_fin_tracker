@@ -1,0 +1,218 @@
+Option Explicit
+
+Sub clear_PL()
+
+    ThisWorkbook.Worksheets("PL").Activate
+    Range("A1").Select
+    
+    Range("D11:O11,D16:O20,D23:O24,D27:O28").Select
+    Selection.ClearContents
+    Range("A1").Select
+    
+End Sub
+
+Sub clear_BS()
+    
+    ThisWorkbook.Worksheets("BS").Activate
+    Range("A1").Select
+    
+    Range("D8:O10,D15:O18,D21:O25,D33:O33").Select
+    Selection.ClearContents
+    Range("A1").Select
+    
+End Sub
+
+Sub select_start()
+Sheets("start").Select
+    Range("A1").Select
+    
+End Sub
+
+Sub select_budget()
+Sheets("budżet").Select
+    Range("A1").Select
+  
+End Sub
+
+Sub select_PL()
+Sheets("PL").Select
+    Range("A1").Select
+    
+End Sub
+
+Sub select_BS()
+Sheets("BS").Select
+    Range("A1").Select
+    
+End Sub
+
+Sub clear_budget()
+    Dim ws As Worksheet
+    Dim rangesToClear As Variant
+    Dim rangeToClear As Variant
+         
+    Application.ScreenUpdating = False
+    
+    Set ws = ThisWorkbook.Worksheets("budżet")
+    ThisWorkbook.Worksheets("budżet").Activate
+    Range("A1").Select
+    
+    With ws
+        .Range("A1").Select
+        
+
+        rangesToClear = Array("D8:D9", "D18:D19", "E12:E13", "E22:E23", _
+                              "H8:H9", "H18:H19", "I12:I13", "I22:I23", _
+                              "L8:L9", "L18:L19", "M12:M13", "M22:M23", _
+                              "P8:P9", "P18:P19", "Q12:Q13", "Q22:Q23", _
+                              "T8:T9", "T18:T19", "U12:U13", "U22:U23", _
+                              "X8:X9", "X18:X19", "Y12:Y13", "Y22:Y23", _
+                              "AB8:AB9", "AB18:AB19", "AC12:AC13", "AC22:AC23", _
+                              "AF8:AF9", "AF18:AF19", "AG12:AG13", "AG22:AG23", _
+                              "AJ8:AJ9", "AJ18:AJ19", "AK12:AK13", "AK22:AK23", _
+                              "AN8:AN9", "AN18:AN19", "AO12:AO13", "AO22:AO23", _
+                              "AR8:AR9", "AR18:AR19", "AS12:AS13", "AS22:AS23", _
+                              "AV8:AV9", "AV18:AV19", "AW12:AW13", "AW22:AW23")
+        
+        For Each rangeToClear In rangesToClear
+            .Range(rangeToClear).ClearContents
+        Next rangeToClear
+        
+        .Range("C1").Select
+    End With
+    
+    Application.ScreenUpdating = True
+    
+End Sub
+
+Sub filter_charts_main()
+        
+    ThisWorkbook.Worksheets("start").Activate
+    
+    Application.ScreenUpdating = False
+
+    Call unfilter_chart_4
+    Call filter_chart_4
+    Call unfilter_chart_5
+    Call filter_chart_5
+
+    ThisWorkbook.Worksheets("start").Activate
+    Range("A1").Select
+
+End Sub
+
+Sub filter_chart_4()
+    Dim CurrentMonth As Integer
+    Dim i As Integer
+    
+    Application.ScreenUpdating = False
+    
+    CurrentMonth = Month(Date)
+    
+    For i = CurrentMonth To 12
+        ActiveSheet.ChartObjects("Chart 4").Activate
+        ActiveChart.ChartGroups(1).FullCategoryCollection(i).IsFiltered = True
+    Next i
+    
+    For i = CurrentMonth To 12
+        ActiveSheet.ChartObjects("Chart 4").Activate
+        ActiveChart.ChartGroups(2).FullCategoryCollection(i).IsFiltered = True
+    Next i
+    
+End Sub
+
+Sub unfilter_chart_4()
+    Dim CurrentMonth As Integer
+    Dim i As Integer
+    
+    Application.ScreenUpdating = False
+    
+    For i = 1 To 12
+        ActiveSheet.ChartObjects("Chart 4").Activate
+        ActiveChart.ChartGroups(1).FullCategoryCollection(i).IsFiltered = False
+    Next i
+    
+    For i = 1 To 12
+        ActiveSheet.ChartObjects("Chart 4").Activate
+        ActiveChart.ChartGroups(2).FullCategoryCollection(i).IsFiltered = False
+    Next i
+    
+End Sub
+
+Sub filter_chart_5()
+    Dim CurrentMonth As Integer
+    Dim i As Integer
+    
+    Application.ScreenUpdating = False
+    
+    CurrentMonth = Month(Date)
+    
+    For i = CurrentMonth To 12
+        ActiveSheet.ChartObjects("Chart 5").Activate
+        ActiveChart.ChartGroups(1).FullCategoryCollection(i).IsFiltered = True
+    Next i
+    
+End Sub
+
+Sub unfilter_chart_5()
+    Dim CurrentMonth As Integer
+    Dim i As Integer
+    
+    Application.ScreenUpdating = False
+    
+    For i = 1 To 12
+        ActiveSheet.ChartObjects("Chart 5").Activate
+        ActiveChart.ChartGroups(1).FullCategoryCollection(i).IsFiltered = False
+    Next i
+    
+End Sub
+
+Sub unhide_tech_sheets()
+    
+    Application.ScreenUpdating = False
+    
+    If Worksheets("tech").Visible = True And Worksheets("tech_tbls").Visible = True Then
+        MsgBox "Wszystkie zakładki techniczne są już widoczne."
+    Else
+        If Worksheets("tech").Visible = False Then
+            Worksheets("tech").Visible = True
+        End If
+        If Worksheets("tech_tbls").Visible = False Then
+            Worksheets("tech_tbls").Visible = True
+        End If
+        MsgBox ("Zakładki techniczne są teraz widoczne. Zostaną automatycznie schowane po zamknięciu pliku.")
+    End If
+    
+    ThisWorkbook.Worksheets("start").Activate
+    Range("A1").Select
+    
+End Sub
+
+Sub hide_tech_sheets()
+    
+    ThisWorkbook.Worksheets("tech").Visible = False
+    ThisWorkbook.Worksheets("tech_tbls").Visible = False
+    
+End Sub
+
+Sub clear_all()
+'Clears all the input data.
+    
+    Dim response As Integer
+    
+    response = MsgBox("Czy na pewno chcesz wyczyścić cały plik? Utracisz wszystkie wprowadzone dane. Tej operacji nie można cofnąć.", vbCritical + vbYesNo)
+    
+    If response = vbYes Then
+        Call clear_budget
+        Call clear_PL
+        Call clear_BS
+        MsgBox "Wszystkie dane zostały wyczyszczone."
+    Else
+        MsgBox "Anulowano operację. Żadne dane nie zostały usunięte."
+        Exit Sub
+    End If
+    
+    ThisWorkbook.Worksheets("start").Activate
+    Range("A1").Select
+    
+End Sub
