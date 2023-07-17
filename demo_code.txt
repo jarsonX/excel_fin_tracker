@@ -1,6 +1,33 @@
-Option Explicit
+____________________________________
+MODULE 1
 
+Option Explicit
+' Module 1 includes code related to basic functionalities like clearing data or activating sheets.
+' It's mostly initiated by the user.
+
+Sub clear_all()
+' Clears all the input data.
+    
+    Dim response As Integer
+    
+    response = MsgBox("Czy na pewno chcesz wyczyścić cały plik? Utracisz wszystkie wprowadzone dane. Tej operacji nie można cofnąć.", vbCritical + vbYesNo)
+    
+    If response = vbYes Then
+        Call clear_budget
+        Call clear_PL
+        Call clear_BS
+        MsgBox "Wszystkie dane zostały wyczyszczone."
+    Else
+        MsgBox "Anulowano operację. Żadne dane nie zostały usunięte."
+        Exit Sub
+    End If
+    
+    ThisWorkbook.Worksheets("start").Activate
+    Range("A1").Select
+    
+End Sub
 Sub clear_PL()
+' Clears PL input data
 
     ThisWorkbook.Worksheets("PL").Activate
     Range("A1").Select
@@ -12,7 +39,8 @@ Sub clear_PL()
 End Sub
 
 Sub clear_BS()
-    
+' Clears BS input data
+
     ThisWorkbook.Worksheets("BS").Activate
     Range("A1").Select
     
@@ -23,30 +51,36 @@ Sub clear_BS()
 End Sub
 
 Sub select_start()
+' Go-to-Start-sheet button
 Sheets("start").Select
     Range("A1").Select
     
 End Sub
 
 Sub select_budget()
+' Go-to-Budget-sheet button
 Sheets("budżet").Select
     Range("A1").Select
   
 End Sub
 
 Sub select_PL()
+' Go-to-PL-sheet button
 Sheets("PL").Select
     Range("A1").Select
     
 End Sub
 
 Sub select_BS()
+' Go-to-BS-sheet button
 Sheets("BS").Select
     Range("A1").Select
     
 End Sub
 
 Sub clear_budget()
+' Clears budget sheet. This is the sheet that is most tricky to clean due to a number of unrelated ranges.'
+
     Dim ws As Worksheet
     Dim rangesToClear As Variant
     Dim rangeToClear As Variant
@@ -84,6 +118,16 @@ Sub clear_budget()
     
 End Sub
 
+____________________________________
+MODULE 2
+
+Option Explicit
+' Module 2 includes subroutines that work in the background or are related to the development.
+
+' On the file startup all charst are filtered to show only past months.
+' Thanks to that, months where we do not have full data yet, are not included.
+' The code is initiated in ThisWorkbook section.
+
 Sub filter_charts_main()
         
     ThisWorkbook.Worksheets("start").Activate
@@ -101,6 +145,8 @@ Sub filter_charts_main()
 End Sub
 
 Sub filter_chart_4()
+' Combo chart
+
     Dim CurrentMonth As Integer
     Dim i As Integer
     
@@ -121,6 +167,8 @@ Sub filter_chart_4()
 End Sub
 
 Sub unfilter_chart_4()
+' Combo chart
+
     Dim CurrentMonth As Integer
     Dim i As Integer
     
@@ -139,6 +187,8 @@ Sub unfilter_chart_4()
 End Sub
 
 Sub filter_chart_5()
+' Column stacked chart
+
     Dim CurrentMonth As Integer
     Dim i As Integer
     
@@ -154,6 +204,8 @@ Sub filter_chart_5()
 End Sub
 
 Sub unfilter_chart_5()
+' Column stacked chart
+
     Dim CurrentMonth As Integer
     Dim i As Integer
     
@@ -166,8 +218,34 @@ Sub unfilter_chart_5()
     
 End Sub
 
-Sub unhide_tech_sheets()
+Sub chart_5_100_percent_stacked()
+' Changes chart 5 type to 100% stacked column chart
+
+    Dim cht As ChartObject
+    Set cht = ActiveSheet.ChartObjects("Chart 5")
     
+    With cht.Chart
+        .ChartType = xlColumnStacked100
+    End With
+
+End Sub
+
+Sub chart_5_standard_stacked()
+' Changes chart 5 type to standard stacked column chart
+
+    Dim cht As ChartObject
+    Set cht = ActiveSheet.ChartObjects("Chart 5")
+    
+    With cht.Chart
+        .ChartType = xlColumnStacked
+    End With
+
+End Sub
+
+Sub unhide_tech_sheets()
+' Tech sheets include formulas and data that is used by charts and tables.
+' It's a sort of a "backend", so by default, those sheets are hidden.
+
     Application.ScreenUpdating = False
     
     If Worksheets("tech").Visible = True And Worksheets("tech_tbls").Visible = True Then
@@ -191,27 +269,5 @@ Sub hide_tech_sheets()
     
     ThisWorkbook.Worksheets("tech").Visible = False
     ThisWorkbook.Worksheets("tech_tbls").Visible = False
-    
-End Sub
-
-Sub clear_all()
-'Clears all the input data.
-    
-    Dim response As Integer
-    
-    response = MsgBox("Czy na pewno chcesz wyczyścić cały plik? Utracisz wszystkie wprowadzone dane. Tej operacji nie można cofnąć.", vbCritical + vbYesNo)
-    
-    If response = vbYes Then
-        Call clear_budget
-        Call clear_PL
-        Call clear_BS
-        MsgBox "Wszystkie dane zostały wyczyszczone."
-    Else
-        MsgBox "Anulowano operację. Żadne dane nie zostały usunięte."
-        Exit Sub
-    End If
-    
-    ThisWorkbook.Worksheets("start").Activate
-    Range("A1").Select
     
 End Sub
