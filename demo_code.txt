@@ -124,7 +124,7 @@ MODULE 2
 Option Explicit
 ' Module 2 includes subroutines that work in the background or are related to the development.
 
-' On the file startup all charst are filtered to show only past months.
+' On the file startup all charts are filtered to show only past months.
 ' Thanks to that, months where we do not have full data yet, are not included.
 ' The code is initiated in ThisWorkbook section.
 
